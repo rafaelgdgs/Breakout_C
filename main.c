@@ -1,7 +1,7 @@
 #include <raylib.h>
 
 static void moveBall(Vector2 *ballPosition, float ballSize,
-                     Vector2 *ballDirection, float ballSpeed, Vector2 *player,
+                     Vector2 *ballDirection, float *ballSpeed, Vector2 *player,
                      Vector2 *playerSize, int screenWidth, int screenHeight);
 static bool ballWillHitPlayer(Vector2 *ballPosition, float ballSize,
                               Vector2 *ballDirection, Vector2 *player,
@@ -21,7 +21,7 @@ int main(void) {
 
   Vector2 player;
   Vector2 playerSize = (Vector2){50.0f, 10.0f};
-  int moveStep = 3;
+  int moveStep = 5;
 
   Vector2 ballPosition;
   float ballSize = 6.0f;
@@ -47,7 +47,7 @@ int main(void) {
       }
     }
 
-    moveBall(&ballPosition, ballSize, &ballDirection, ballSpeed, &player,
+    moveBall(&ballPosition, ballSize, &ballDirection, &ballSpeed, &player,
              &playerSize, screenWidth, screenHeight);
 
     if (ballPosition.y >= player.y + playerSize.y) {
@@ -69,7 +69,7 @@ int main(void) {
 }
 
 static void moveBall(Vector2 *ballPosition, float ballSize,
-                     Vector2 *ballDirection, float ballSpeed, Vector2 *player,
+                     Vector2 *ballDirection, float *ballSpeed, Vector2 *player,
                      Vector2 *playerSize, int screenWidth, int screenHeight) {
   // Invert ballDirection
   // ------------------------------------------
@@ -93,9 +93,9 @@ static void moveBall(Vector2 *ballPosition, float ballSize,
 
   // The actual Ball Movement
   // --------------------------------------------
-  ballSpeed += 0.1f;
-  ballPosition->x += ballDirection->x + ballSpeed;
-  ballPosition->y += ballDirection->y + ballSpeed;
+  // *ballSpeed += 0.00001f;
+  ballPosition->x += ballDirection->x * *ballSpeed;
+  ballPosition->y += ballDirection->y * *ballSpeed;
 }
 
 static bool ballWillHitPlayer(Vector2 *ballPosition, float ballSize,
@@ -136,8 +136,8 @@ static void reset(Vector2 *ballPosition, Vector2 *ballDirection,
   ballDirection->x = 1.0f;
   ballDirection->y = 2.0f;
 
-  *ballSpeed = 1.0f;
+  *ballSpeed = 2.0f;
 
-  player->x = 300.0f;
+  player->x = 280.0f;
   player->y = 700.0f;
 }
